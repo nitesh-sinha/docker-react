@@ -1,0 +1,22 @@
+version: '3'
+services:
+  # This container will start the react web service
+  react-web:
+    stdin_open: true # needed because the react container does not stay open without this due to a bug in it
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - .:/app
+  # This container will run the tests
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
